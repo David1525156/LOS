@@ -22,6 +22,12 @@
       <el-table-column prop="title" label="书名" min-width="220" />
       <el-table-column prop="author" label="作者" min-width="160" />
       <el-table-column prop="stock" label="库存" width="100" align="center" />
+      <el-table-column v-if="isLoggedIn" label="操作" width="160" align="center">
+        <template #default="{ row }">
+          <el-button type="primary" link @click.stop="goEdit(row)">编辑</el-button>
+          <el-button type="danger" link @click.stop="handleDelete(row)">删除</el-button>
+        </template>
+      </el-table-column>
     </el-table>
 
     <div class="pagination">
@@ -39,9 +45,11 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { listBooks } from '../api/book'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import { listBooks, deleteBook } from '../api/book'
 
 const router = useRouter()
+const isLoggedIn = ref(!!localStorage.getItem('token'))
 const books = ref([])
 const total = ref(0)
 const page = ref(1)
@@ -65,6 +73,25 @@ async function loadBooks() {
 
 function goDetail(row) {
   router.push(`/books/${row.id}`)
+}
+
+function goEdit(row) {
+  router.push(`/books/${row.id}/edit`)
+}
+
+async function handleDelete(row) {
+  try {
+    await ElMessageBox.confirm(`确认删除图书「${row.title}」？`, '删除确认', { type: 'warning' })
+  } catch (e) {
+    return
+  }
+  try {
+    await deleteBook(row.id)
+    ElMessage.success('删除成功')
+    loadBooks()
+  } catch (e) {
+    // 错误提示由 axios 拦截器统一弹出
+  }
 }
 
 onMounted(loadBooks)
