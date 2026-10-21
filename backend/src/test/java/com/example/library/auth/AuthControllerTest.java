@@ -1,6 +1,7 @@
 package com.example.library.auth;
 
 import com.example.library.mapper.AdminMapper;
+import com.example.library.mapper.BookMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -33,6 +34,9 @@ class AuthControllerTest {
 
     @MockBean
     private AdminMapper adminMapper;
+
+    @MockBean
+    private BookMapper bookMapper;
 
     @Test
     void login_success() throws Exception {
