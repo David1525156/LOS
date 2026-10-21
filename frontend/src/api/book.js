@@ -14,3 +14,13 @@ export function getBook(id) {
 export function createBook(data) {
   return http.post('/books', data)
 }
+
+/** 修改图书（需管理员登录） */
+export function updateBook(id, data) {
+  return http.put(`/books/${id}`, data)
+}
+
+/** 删除图书（需管理员登录） */
+export function deleteBook(id) {
+  return http.delete(`/books/${id}`)
+}
