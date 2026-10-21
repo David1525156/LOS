@@ -9,3 +9,8 @@ export function listBooks(params) {
 export function getBook(id) {
   return http.get(`/books/${id}`)
 }
+
+/** 新增图书（US-03，需管理员登录） */
+export function createBook(data) {
+  return http.post('/books', data)
+}
